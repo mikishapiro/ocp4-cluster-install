@@ -31,7 +31,7 @@ echo '<deploy-key>' > ~/.ssh/id_rsa && chmod 400 ~/.ssh/id_rsa
 
 ### Install Repository
 ```
-git clone origin git@bitbucket.org:doecharlie/ocp4-cluster-install.git
+git clone origin git@github.com:mikishapiro/ocp4-cluster-install.git
 
 ```
 
