@@ -1,0 +1,27 @@
+---
+# vars file for ocp4
+dir: /home/ec2-user
+var_installer_baseurl: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/
+var_installer_program: openshift-install-linux-4.3.1.tar.gz
+var_installer_clienttools: openshift-client-linux-4.3.1.tar.gz
+files_to_encrypt:
+    - "{{ dir }}/ocp/{{ var_cluster_base_domain }}/.openshift_install_state.json"
+    - "{{ dir }}/ocp/{{ var_cluster_base_domain }}/terraform.tfvars.json"
+    - "{{ dir }}/ocp/{{ var_cluster_base_domain }}/terraform.aws.auto.tfvars.json"
+    - "{{ dir }}/ocp/{{ var_cluster_base_domain }}/auth/kubeconfig"
+    - "{{ dir }}/ocp/{{ var_cluster_base_domain }}/auth/kubeadmin-password"
+    - "{{ dir }}/ocp/{{ var_cluster_base_domain }}/tls/journal-gatewayd.key"
+    - "{{ dir }}/ocp/{{ var_cluster_base_domain }}/tls/journal-gatewayd.crt"
+    - "{{ dir }}/ocp/{{ var_cluster_base_domain }}/metadata.json"
+    - "{{ dir }}/ocp/{{ var_cluster_base_domain }}/terraform.tfstate"
+files_to_archive:
+    - "{{ dir }}/ocp/{{ var_cluster_base_domain }}/.openshift_install_state.json"
+    - "{{ dir }}/ocp/{{ var_cluster_base_domain }}/.openshift_install.log"
+    - "{{ dir }}/ocp/{{ var_cluster_base_domain }}/terraform.tfvars.json"
+    - "{{ dir }}/ocp/{{ var_cluster_base_domain }}/terraform.aws.auto.tfvars.json"
+    - "{{ dir }}/ocp/{{ var_cluster_base_domain }}/auth/kubeconfig"
+    - "{{ dir }}/ocp/{{ var_cluster_base_domain }}/auth/kubeadmin-password"
+    - "{{ dir }}/ocp/{{ var_cluster_base_domain }}/tls/journal-gatewayd.key"
+    - "{{ dir }}/ocp/{{ var_cluster_base_domain }}/tls/journal-gatewayd.crt"
+    - "{{ dir }}/ocp/{{ var_cluster_base_domain }}/metadata.json"
+    - "{{ dir }}/ocp/{{ var_cluster_base_domain }}/terraform.tfstate"

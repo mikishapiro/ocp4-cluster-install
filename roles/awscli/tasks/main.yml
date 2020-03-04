@@ -1,0 +1,38 @@
+--- 
+# var_client_filename
+- name: Download the required tooling
+  get_url: 
+    url: "{{ aws_installer }}"
+    dest: "{{ dir }}/awscli-exe-linux-x86_64.zip"
+
+- name: Create a user-writable directory for tools
+  file:
+    name: "{{ dir }}/tools"
+    state: directory
+
+- name: Unarchive the aws tools
+  unarchive:
+    src: "{{ dir }}/awscli-exe-linux-x86_64.zip"
+    dest: "{{ dir }}/tools"
+
+- name: Set in the environment where aws lives
+  lineinfile:
+    path: ~/.bash_profile
+    line: "{{ line }}" 
+  loop:
+    - 'export PATH=$PATH:{{ dir }}/tools/aws/dist/'
+    - 'export AWS_SECRET_ACCESS_KEY="{{ aws_secret_access_key }}"'
+    - 'export AWS_ACCESS_KEY_ID="{{ aws_secret_access_key_id }}"'
+  loop_control:
+    loop_var: line
+
+
+- name: Create a user-writable directory for tools
+  file:
+    name: ~/.aws
+    state: directory
+
+- name: Deploy default aws credentials for this bastion
+  template:
+    src: templates/credentials.j2
+    dest: ~/.aws/credentials

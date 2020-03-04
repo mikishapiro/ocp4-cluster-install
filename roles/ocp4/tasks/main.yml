@@ -1,0 +1,122 @@
+---
+# var_client_filename
+- name: Download the required tooling
+  get_url:
+    url: "{{ var_installer_baseurl }}{{ pkg }}"
+    dest: "{{ dir }}/{{ pkg }}"
+  loop:
+    - "{{ var_installer_program }}"
+    - "{{ var_installer_clienttools }}"
+  loop_control:
+    loop_var: pkg
+
+- name: Create a user-writable directory for tools
+  file:
+    name: "{{ dir }}/tools"
+    state: directory
+
+ - name: Ensure downloaded installers are unarchived
+  unarchive:
+    src: "{{ dir }}/{{ pkg }}"
+    dest: "{{ dir }}/tools/"
+  loop:
+    - "{{ var_installer_program }}"
+    - "{{ var_installer_clienttools }}"
+  loop_control:
+    loop_var: pkg
+
+- name: Set in the environment where cluster installer tools live
+  lineinfile:
+    path: "{{ dir }}/.bash_profile"
+    line: "{{ linetoadd }}"
+  loop:
+    - "export KUBECONFIG={{ dir }}/ocp/{{ var_cluster_base_domain }}/auth/kubeconfig"
+    - export PATH=$PATH:{{ dir }}/tools/
+  loop_control:
+    loop_var: linetoadd
+
+- name: Create a directory for the cluster installer ignition configs
+  file:
+    name: "{{ dir }}/ocp/{{ var_cluster_base_domain }}"
+    state: directory
+- name: Deploy the configuration file from template
+  template:
+    src: templates/install-config.yaml.j2
+    dest: "{{ dir }}/ocp/{{ var_cluster_base_domain }}/install-config.yaml"
+
+- name: Install in background tmux, run 'tmux a' to monitor
+  shell: "bash -c 'tmux new-session -d -s ocp{{ var_cluster_instruction }} \"bash --init-file <({{ dir }}/tools/openshift-install {{ var_cluster_instruction }} cluster --dir={{ dir }}/ocp/{{ var_cluster_base_domain }} --log-level debug)\"'"
+    
+- name: Check pid of openshift-install
+  pids:
+    name: openshift-install
+  register: installer_pids
+
+- name: Wait for the main installer to finish - may take around 25 minutes
+  wait_for:
+    path: "/proc/{{ installer_pid }}/status"
+    state: absent
+    timeout: 3600
+  loop: "{{ installer_pids.pids }}"
+  loop_control:
+    loop_var: installer_pid
+
+# Apply node labels:
+- name: Interrogate cluster
+  k8s_facts:
+    api_version: config.openshift.io/v1
+    kind: Infrastructure
+    name: cluster
+  register: infradata
+  when: var_cluster_instruction == "create"
+
+- name: Capture nodes
+  k8s_facts:
+    kind: Node
+  register: nodedata
+  when: var_cluster_instruction == "create"
+
+- name: Apply the application label to the worker nodes
+  k8s:
+    kubeconfig: "{{ lookup('env','KUBECONFIG') }}"
+    api_version: v1
+    kind: Node
+    name: "{{ node.metadata.name }}"
+    definition:
+      metadata:
+        labels:
+          node-role.kubernetes.io/application: ""
+  loop: "{{ nodedata.resources }}"
+  loop_control:
+    loop_var: node
+  when:
+    - node.metadata.labels['node-role.kubernetes.io/worker'] is defined
+    - node.metadata.labels['node-role.kubernetes.io/infra'] is not defined
+
+# Grab the machinesets
+- name: Grab the machinesets
+  k8s_facts:
+    api_version: machine.openshift.io/v1beta1
+    kind: MachineSet
+    namespace: openshift-machine-api
+  register: machinesets
+  when: var_cluster_instruction == "create"
+
+- name: apply the same label to the default worker machineset stanza
+  k8s:
+    kubeconfig: "{{ lookup('env','KUBECONFIG') }}"
+    api_version: machine.openshift.io/v1beta1
+    kind: MachineSet
+    name: "{{ machineset.metadata.name }}"
+    namespace: openshift-machine-api
+    definition:
+      spec:
+        template:
+          spec:
+            metadata:
+              labels:
+                node-role.kubernetes.io/application: ""
+  loop: "{{ machinesets.resources }}"
+  loop_control:
+    loop_var: machineset
+  when: machineset.metadata.name is search ("worker") 

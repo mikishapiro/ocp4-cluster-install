@@ -1,0 +1,31 @@
+apiVersion: v1
+baseDomain: {{ var_cluster_base_domain }}
+compute:
+- hyperthreading: Enabled
+  name: worker
+  platform: 
+    aws:
+      type: r5.xlarge
+  replicas: 3
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  platform: {}
+  replicas: 3
+metadata:
+  creationTimestamp: null
+  name: {{ var_cluster_name }}
+networking:
+  clusterNetwork:
+  - cidr: 10.127.0.0/16
+    hostPrefix: 23
+  machineCIDR: {{ var_cluster_machine_cidr }}
+  networkType: OpenShiftSDN
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+  aws:
+    region: ap-southeast-2
+publish: External
+pullSecret: '{{ pull_secret }}'
+sshKey: {{ ssh_key }}

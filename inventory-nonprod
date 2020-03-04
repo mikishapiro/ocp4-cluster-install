@@ -1,0 +1,17 @@
+[nonprod]
+# groupvars containg vault with credentials will apply to all of nonprod
+[nonprod:vars]
+doe_env=nonprod
+
+[nonprod:children]
+# Use the nonprod:children section to determine which cluster settings will be used by the installer
+nonprod1
+
+[nonprod1]
+localhost
+[nonprod1:vars]
+# inventory vars apply here
+var_cluster_base_domain=example.com
+var_cluster_machine_cidr=10.0.0.1/16
+
+

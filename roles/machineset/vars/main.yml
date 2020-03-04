@@ -1,0 +1,5 @@
+---
+# vars file for machineset
+disk_size: 1024
+instance_type: r5.xlarge
+name_identifier: "{{ name_label.0 }}"

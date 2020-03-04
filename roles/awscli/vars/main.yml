@@ -1,0 +1,4 @@
+---
+# vars file for awscli
+aws_installer: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+dir: /home/ec2-user

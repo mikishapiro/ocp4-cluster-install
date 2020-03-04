@@ -1,0 +1,6 @@
+---
+# defaults file for machinese
+zone_suffixes:
+  - a
+  - b
+  - c

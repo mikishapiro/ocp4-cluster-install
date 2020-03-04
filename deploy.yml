@@ -1,0 +1,27 @@
+---
+- name: Play to deploy an openshift 4 cluster 
+  hosts: localhost
+  connection: local
+  vars: 
+    var_cluster_instruction: create
+    dir: /home/ec2-user
+  tasks:
+    - name: Call the aws and ocp cluster deploy roles
+      include_role:
+        name: "{{ item }}"
+      loop:
+        - ocp4
+      when: 
+        - var_cluster_instruction != "modify"
+        
+    - name: Run post install tasks
+      include_role:
+        name: "{{ item }}"
+      loop:
+        - ocp4-post
+        - awscli
+        - efk
+        - monitoring
+      when:
+        - var_cluster_instruction != "destroy"
+

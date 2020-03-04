@@ -1,0 +1,19 @@
+# AWS 
+aws_secret_access_key_id: SECRET
+aws_secret_access_key: SECRET
+
+# OpenShift
+pull_secret: SECRET
+ssh_key: |
+  SSHKEY
+
+# Quay
+quay_admin_user: ADMINUSER
+quay_admin_password: SECRET
+quay_rds_user: USER
+quay_rds_password: SECRET
+quay_rds_host: HOST
+quay_rds_admin_password: SECRET
+
+quay_secret_access_key_id: SECRET
+quay_secret_access_key: SECRET
