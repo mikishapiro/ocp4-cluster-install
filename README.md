@@ -12,7 +12,7 @@ sudo subscription-manager repos --enable=rhel-8-for-x86_64-baseos-rpms \
   --enable=rhel-8-for-x86_64-appstream-rpms --enable=ansible-2.8-for-rhel-8-x86_64-rpms 
 
 sudo yum -y install git ansible wget unzip vim tmux
-sudo ln -nfs /usr/share/zoneinfo/Australia/Sydney  /etc/localtime
+sudo ln -nfs /usr/share/zoneinfo/Australia/Sydney  /etc/localtime # Or whatever timezone you are in
 sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 sudo yum -y install python3-kubernetes python3-openshift python3-psutil.x86_64 yamllint platform-python-pip
 pip3 install ansible-lint
