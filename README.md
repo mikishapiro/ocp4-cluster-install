@@ -36,7 +36,7 @@ git clone origin git@github.com:mikishapiro/ocp4-cluster-install.git
 ```
 
 ### Ansible Vault
-There is a different vault ID and password
+Ensure your group_vars (containing sensitive stuff) are set correctly.
 ```
 ansible-vault edit --vault-id=YOURVAULTPASSWORDFILE group_vars/nonprod.yml
 ```
@@ -50,3 +50,4 @@ ansible-playbook -i <inventory> deploy.yml -e var_cluster_instruction=create
 ansible-playbook -i inventory_nonprod deploy.yml -e var_cluster_instruction=create 
 ```
 
+You can also use 'modify' to re-run the post-installer roles or 'destroy' to destroy the cluster (requires the post-build artfecacts)
