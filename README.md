@@ -50,4 +50,4 @@ ansible-playbook -i <inventory> deploy.yml -e var_cluster_instruction=create
 ansible-playbook -i inventory_nonprod deploy.yml -e var_cluster_instruction=create 
 ```
 
-You can also use 'modify' to re-run the post-installer roles or 'destroy' to destroy the cluster (requires the post-build artfecacts)
+You can also use 'var_cluster_instruction=modify' instead of var_cluster_instruction=create to re-run the post-installer roles or 'var_cluster_instruction=destroy' to destroy the cluster (requires the post-build artfecacts)
