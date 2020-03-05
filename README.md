@@ -2,7 +2,7 @@
 
 ### Bastion Provisioning
 
-Run these commands to setup a new host:
+Run these commands on a RHEL8 AMI to setup a new bastion host that will be used as a base of operations:
 
 ```
 ls /etc/yum.repos.d/redhat-rhui*.repo | xargs -I{} sudo mv {} {}.disabled # Disable RHUI
