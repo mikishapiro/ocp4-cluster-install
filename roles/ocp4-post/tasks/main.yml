@@ -122,7 +122,7 @@
 #
 
 - name: Encrypt sensitive files
-  command: "ansible-vault encrypt {{ file }} --vault-password-file {{ dir }}/ocp4-cluster-install/.vault.{{ doe_env }}"
+  command: "ansible-vault encrypt {{ file }} --vault-password-file {{ dir }}/ocp4-cluster-install/.vault.{{ env }}"
   loop: "{{ files_to_encrypt }}"
   loop_control:
     loop_var: file
@@ -184,7 +184,7 @@
   ignore_errors: true
 
 - name: Decrypt kubeconfig file
-  command: "ansible-vault decrypt {{ dir }}/ocp/{{ var_cluster_base_domain }}/{{ file }} --vault-password-file {{ dir }}/ocp4-cluster-install/.vault.{{ doe_env }}"
+  command: "ansible-vault decrypt {{ dir }}/ocp/{{ var_cluster_base_domain }}/{{ file }} --vault-password-file {{ dir }}/ocp4-cluster-install/.vault.{{ env }}"
   when: var_cluster_instruction == "create"
   loop:
     - auth/kubeconfig
