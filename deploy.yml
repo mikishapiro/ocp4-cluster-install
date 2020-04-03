@@ -1,7 +1,7 @@
 ---
 - name: Play to deploy an openshift 4 cluster 
   hosts: localhost
-  connection: local
+#  connection: local
   vars: 
     var_cluster_instruction: create
     dir: /home/ec2-user
