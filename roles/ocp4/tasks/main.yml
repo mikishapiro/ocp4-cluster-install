@@ -21,7 +21,8 @@
 
 - name: Ensure downloaded installers are unarchived
   unarchive:
-    remote_src: "{{ dir }}/{{ pkg }}"
+    remote_src: yes
+    src: "{{ dir }}/{{ pkg }}"
     dest: "{{ dir }}/tools/"
   loop:
     - "{{ var_installer_program }}"
