@@ -1,5 +1,9 @@
 ---
 # var_client_filename
+- name: make sure dir exists
+  file:
+    name: "{{ dir }}"
+    state: directory
 - name: Download the required tooling
   get_url:
     url: "{{ var_installer_baseurl }}{{ pkg }}"
