@@ -1,6 +1,6 @@
 ---
 - name: Play to deploy an openshift 4 cluster 
-  hosts: bastion
+  hosts: ocp-bastion
 #  connection: local
   vars: 
     var_cluster_instruction: create
